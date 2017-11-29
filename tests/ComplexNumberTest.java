@@ -61,5 +61,13 @@ class ComplexNumberTest {
 		assertEquals(0.0, c.getA(), 1e-9);
 		assertEquals(5.0, c.getB(), 1e-9);
 	}
+	
+	@Test
+	void testSqrt() {
+	  ComplexNumber c = new ComplexNumber(1, 1);
+	  c = c.sqrt();
+	  assertEquals(1.0986841134678098, c.getA());
+	  assertEquals(0.4550898605622273, c.getB());
+	}
 
 }

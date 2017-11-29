@@ -110,4 +110,37 @@ class CalculatorTest {
 		assertEquals(res.getA(), eval.visit(tree).getA());
 		assertEquals(res.getB(), eval.visit(tree).getB());
 	}
+	
+	@Test
+	void testSqrtOperation() {
+		setup("sqrt(1(cos(1.047197)+isin(1.047197)))");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		number = number.sqrt();
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(number.getA(), eval.visit(tree).getA());
+		assertEquals(number.getB(), eval.visit(tree).getB());
+	}
+	
+    @Test 
+    void testSqrtCompOperation() {
+    	setup("sqrt(1(cos(1.047197)+isin(1.047197))) + 1(cos(1.047197)+isin(1.047197))");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		number = number.sqrt();
+		number = number.add(ComplexNumber.convertPolar(1, 1.047197));
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertTrue(number.equals(eval.visit(tree)));
+    }
+    
+    @Test
+    void testSqrtExpresion() {
+    	setup("sqrt(1(cos(1.047197)+isin(1.047197)) * 1(cos(1.047197)+isin(1.047197)))");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		number = number.mul(number);
+		number = number.sqrt();
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertTrue(number.equals(eval.visit(tree)));
+    }
 }

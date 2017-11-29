@@ -46,6 +46,13 @@ public class MainVisitor {
 				 return left.sub(right);
 			 }
 		 }
+		 
+		 @Override
+		 public ComplexNumber visitSqrt(CalculatorParser.SqrtContext ctx) {
+			 ComplexNumber c = visit(ctx.sqrtComplex().expr());
+			 return c.sqrt();
+		 }
+		 
 	 }
 	 public static void main(String[] args) throws Exception {
 	        String input = null;
@@ -59,11 +66,15 @@ public class MainVisitor {
 	        //System.out.println(tokens.getText());
 
 	        CalculatorParser parser = new CalculatorParser(tokens);
-	        ParseTree tree = parser.expr(); // parse
+	        parser.setBuildParseTree(true);
+	        ParseTree tree = parser.expr();
+	        int errors = parser.getNumberOfSyntaxErrors();
 
-	        Visitor eval = new Visitor();
-	        System.out.println("");
-	        System.out.println(eval.visit(tree).getA());
-	        System.out.println(eval.visit(tree).getB());
+	        out.println("\nNumber of syntax errors: " + errors);
+
+	        if (0 == errors) {
+		        Visitor eval = new Visitor();
+		        out.print(eval.visit(tree).toString());	  
+	        }
 	 }
 }
