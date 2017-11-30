@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.*;
 public class MainVisitor {
 	static class Visitor extends CalculatorBaseVisitor<ComplexNumber> {
 		 
-		 @Override
+		 @Overrid
 		 public ComplexNumber visitNumber(CalculatorParser.NumberContext ctx) {
 			 return new ComplexNumber(Double.parseDouble(ctx.getText()), 0);
 		 }
