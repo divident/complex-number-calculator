@@ -1,12 +1,13 @@
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.junit.jupiter.api.Test;
 
-class CalculatorTest {
+public class CalculatorTest {
 
 	ParseTree tree;
 	CalculatorParser parser;
@@ -21,109 +22,101 @@ class CalculatorTest {
 	}
 
 	@Test
-	void testNumberDouble() {
+	public void testNumberDouble() {
 		setup("1.2319");
 		assertEquals(CalculatorParser.DOUBLE, parser.getCurrentToken().getType());
 	}
 
 	@Test
-	void testNumberInt() {
+	public void testNumberInt() {
 		setup("1");
 		assertEquals(CalculatorParser.INT, parser.getCurrentToken().getType());
 	}
 
 	@Test
-	void testValidComplexNumber() {
+	public void testValidComplexNumber() {
 		setup("1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(number.getA(), eval.visit(tree).getA());
-		assertEquals(number.getB(), eval.visit(tree).getB());
+		assertTrue(number.equals(eval.visit(tree)));
 
 	}
 
 	@Test
-	void testOperationMul() {
+	public void testOperationMul() {
 		setup("1(cos(1.047197)+isin(1.047197)) * 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.mul(number);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(res.getA(), eval.visit(tree).getA());
-		assertEquals(res.getB(), eval.visit(tree).getB());
+		assertTrue(res.equals(eval.visit(tree)));
 	}
 
 	@Test
-	void testOperationDiv() {
+	public void testOperationDiv() {
 		setup("1(cos(1.047197)+isin(1.047197)) / 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.div(number);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(res.getA(), eval.visit(tree).getA());
-		assertEquals(res.getB(), eval.visit(tree).getB());
+		assertTrue(res.equals(eval.visit(tree)));
 	}
 	
 	@Test
-	void testOperationAdd() {
+	public void testOperationAdd() {
 		setup("1(cos(1.047197)+isin(1.047197)) + 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.add(number);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(res.getA(), eval.visit(tree).getA());
-		assertEquals(res.getB(), eval.visit(tree).getB());
+		assertTrue(res.equals(eval.visit(tree)));
 	}
 	
 	@Test
-	void testOperationSub() {
+	public void testOperationSub() {
 		setup("1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.sub(number);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(res.getA(), eval.visit(tree).getA());
-		assertEquals(res.getB(), eval.visit(tree).getB());
+		assertTrue(res.equals(eval.visit(tree)));
 	}
 	
 	@Test
-	void testOperationPriority() {
+	public void testOperationPriority() {
 		setup("1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197) / 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.div(number);
 		res = number.sub(res);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(res.getA(), eval.visit(tree).getA());
-		assertEquals(res.getB(), eval.visit(tree).getB());
+		assertTrue(res.equals(eval.visit(tree)));
 	}
 	
 	@Test
-	void testOperationBrackets() {
+	public void testOperationBrackets() {
 		setup("(1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197))) / 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.sub(number);
 		res = res.div(number);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(res.getA(), eval.visit(tree).getA());
-		assertEquals(res.getB(), eval.visit(tree).getB());
+		assertTrue(res.equals(eval.visit(tree)));
 	}
 	
 	@Test
-	void testSqrtOperation() {
+	public void testSqrtOperation() {
 		setup("sqrt(1(cos(1.047197)+isin(1.047197)))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		number = number.sqrt();
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(number.getA(), eval.visit(tree).getA());
-		assertEquals(number.getB(), eval.visit(tree).getB());
+		assertTrue(number.equals(eval.visit(tree)));
 	}
 	
     @Test 
-    void testSqrtCompOperation() {
+    public void testSqrtCompOperation() {
     	setup("sqrt(1(cos(1.047197)+isin(1.047197))) + 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
@@ -134,7 +127,7 @@ class CalculatorTest {
     }
     
     @Test
-    void testSqrtExpresion() {
+    public void testSqrtExpresion() {
     	setup("sqrt(1(cos(1.047197)+isin(1.047197)) * 1(cos(1.047197)+isin(1.047197)))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
