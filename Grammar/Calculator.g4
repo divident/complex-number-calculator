@@ -17,21 +17,25 @@ RPAR  : ')';
 IMAG  : 'i';
 SQRT  : 'sqrt';
 RE    :  're';
+      
+      
+complexNumber: (number) MULT? LPAR COS LPAR? (number) RPAR? PLUS IMAG MULT? SIN LPAR? (number) RPAR? RPAR;
+
+rectComplexNumber: LPAR number sig=('-'| '+') (IMAG MULT? number | number MULT? IMAG) RPAR;
 
 number: INT
       | DOUBLE
       ;
-      
-      
-complexNumber: (number) MULT? LPAR COS LPAR? (number) RPAR? PLUS IMAG MULT? SIN LPAR? (number) RPAR? RPAR;
-sqrtComplex: SQRT LPAR expr RPAR; 
-reComplex:   RE LPAR expr RPAR;
+                 
+sqrtComplex: SQRT LPAR expr RPAR 
+           | SQRT expr
+           ;
 
 expr: '('expr')' # Parens
     | expr op=('*'|'/') expr # MulDiv
     | expr op=('+'|'-') expr # AddSub
     | sqrtComplex #Sqrt
-    | reComplex #Re
     | complexNumber # Complex
+    | rectComplexNumber # Rect
     ;
 

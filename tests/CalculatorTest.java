@@ -136,4 +136,60 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
     }
+    
+	@Test
+	public void testValidRectComplexNumber() {
+		setup("(5 - i7)");
+		tree = parser.expr();
+		ComplexNumber number = new ComplexNumber(5, -7);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+        assertTrue(number.equals(eval.visit(tree)));
+	}
+	
+	@Test
+	public void testValidRectComplexNumberAddOperation() {
+		setup("(5 + 7i) + (5 + 7i)");
+		tree = parser.expr();
+		ComplexNumber number = new ComplexNumber(10, 14);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertTrue(number.equals(eval.visit(tree)));
+	}
+	
+	@Test
+	public void testValidRectComplexNumberMinusOperation() {
+		setup("(5.5 + 7i) - (2.5+ 2i)");
+		tree = parser.expr();
+		ComplexNumber number = new ComplexNumber(3, 5);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertTrue(number.equals(eval.visit(tree)));
+	}
+	
+	@Test
+	public void testValidRectComplexNumberMulOperation() {
+		setup("(5 + 7i) * (2.0 + 2i)");
+		tree = parser.expr();
+		ComplexNumber number = new ComplexNumber(-4, 24);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertTrue(number.equals(eval.visit(tree)));
+	}
+	
+	@Test
+	public void testValidRectComplexNumberDivOperation() {
+		setup("(5 + 7i) / (2 + 2i)");
+		tree = parser.expr();
+		ComplexNumber number = new ComplexNumber(3, 0.5);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertTrue(number.equals(eval.visit(tree)));
+	}
+	
+	@Test
+	public void testValidRectComplexNumberSqrtOperation() {
+		setup("sqrt(2.0 + 2i)");
+		tree = parser.expr();
+		ComplexNumber number = new ComplexNumber(1.5537739740300374, 0.6435942529055826);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
+	}
+	
 }

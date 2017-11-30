@@ -53,6 +53,17 @@ public class MainVisitor {
 			 return c.sqrt();
 		 }
 		 
+		 @Override
+		 public ComplexNumber visitRectComplexNumber(CalculatorParser.RectComplexNumberContext ctx) {
+			 ComplexNumber ret = new ComplexNumber(
+					 visit(ctx.number(0)).getA(),
+					 visit(ctx.number(1)).getA()
+					 );
+			 if(ctx.sig.getType() == CalculatorParser.MINUS) {
+				 ret.setB(ret.getB()*-1);
+			 } 
+			 return ret;
+		 }
 	 }
 	 public static void main(String[] args) throws Exception {
 	        String input = null;
