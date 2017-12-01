@@ -15,7 +15,7 @@ public class MainVisitor {
 		 }
 		 
 		 @Override
-		 public ComplexNumber visitComplexNumber(CalculatorParser.ComplexNumberContext ctx) {
+		 public ComplexNumber visitTrigComplex(CalculatorParser.TrigComplexContext ctx) {
 			 ComplexNumber mod = visit(ctx.number(0));
 			 ComplexNumber degree = visit(ctx.number(1));
 			 return ComplexNumber.convertPolar(mod.getA(), degree.getA());
@@ -54,15 +54,35 @@ public class MainVisitor {
 		 }
 		 
 		 @Override
-		 public ComplexNumber visitRectComplexNumber(CalculatorParser.RectComplexNumberContext ctx) {
+		 public ComplexNumber visitRectComplex(CalculatorParser.RectComplexContext ctx) {
 			 ComplexNumber ret = new ComplexNumber(
-					 visit(ctx.number(0)).getA(),
-					 visit(ctx.number(1)).getA()
+					 visit(ctx.realNumber(0)).getA(),
+					 visit(ctx.realNumber(1)).getA()
 					 );
 			 if(ctx.sig.getType() == CalculatorParser.MINUS) {
 				 ret.setB(ret.getB()*-1);
 			 } 
 			 return ret;
+		 }
+		 
+		 @Override
+		 public ComplexNumber visitPositiveNumber(CalculatorParser.PositiveNumberContext ctx) {
+			 return visit(ctx.number());
+		 }
+		 
+		 @Override
+		 public ComplexNumber visitNegativeNumber(CalculatorParser.NegativeNumberContext ctx) {
+			 ComplexNumber c = visit(ctx.number());
+			 c.setA(-1*c.getA());
+			 return c;
+		 }
+		 
+		 @Override
+		 public ComplexNumber visitImgNumber(CalculatorParser.ImgNumberContext ctx) {
+			 ComplexNumber c = visit(ctx.realNumber());
+			 c.setB(c.getA());
+			 c.setA(0);
+			 return c;
 		 }
 	 }
 	 public static void main(String[] args) throws Exception {

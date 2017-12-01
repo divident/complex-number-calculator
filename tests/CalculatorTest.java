@@ -139,9 +139,9 @@ public class CalculatorTest {
     
 	@Test
 	public void testValidRectComplexNumber() {
-		setup("(5 - i7)");
+		setup("(-5 - i7)");
 		tree = parser.expr();
-		ComplexNumber number = new ComplexNumber(5, -7);
+		ComplexNumber number = new ComplexNumber(-5, -7);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
         assertTrue(number.equals(eval.visit(tree)));
 	}
@@ -192,4 +192,48 @@ public class CalculatorTest {
 		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
 	}
 	
+	@Test
+	public void testValidImgNumber() {
+		setup("4i");
+		tree = parser.expr();
+		ComplexNumber number = new ComplexNumber(0, 4);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
+		setup("i-4");
+		tree = parser.expr();
+		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(number.getB(), -1*eval.visit(tree).getB(), 1e-9);
+		setup("4*i");
+		tree = parser.expr();
+		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
+		setup("i*-4");
+		tree = parser.expr();
+		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(number.getB(), -1*eval.visit(tree).getB(), 1e-9);
+	}
+	
+	@Test
+	public void testValidImgNumberOper() {
+		setup("4i * (2 - 2i)");
+		tree = parser.expr();
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		ComplexNumber a = new ComplexNumber(0, 4);
+		ComplexNumber b = new ComplexNumber(2, -2);
+		ComplexNumber c = a.mul(b);
+		assertTrue(c.equals(eval.visit(tree)));
+		setup("4i + (2 - 2i)");
+		c = a.add(b);
+		tree = parser.expr();
+		assertTrue(c.equals(eval.visit(tree)));
+		setup("sqrt(4i) + 2i *(-2 -2i)");
+		ComplexNumber d = new ComplexNumber(0, 2);
+		b.setA(-1*b.getA());
+		c = a.sqrt();
+		d = d.mul(b);
+		c = c.add(d);
+		tree = parser.expr();
+		assertTrue(c.equals(eval.visit(tree)));
+	}
 }
