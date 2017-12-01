@@ -70,4 +70,5 @@ public class ComplexNumberTest {
 	  assertEquals(1.0986841134678098, c.getA(), 1e-9);
 	  assertEquals(0.4550898605622273, c.getB(), 1e-9);
 	}
+	
 }

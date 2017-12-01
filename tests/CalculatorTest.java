@@ -236,4 +236,83 @@ public class CalculatorTest {
 		tree = parser.expr();
 		assertTrue(c.equals(eval.visit(tree)));
 	}
+
+	@Test
+	public void testExpValidComplexNumber() {
+		setup("1*e^(i*1.047197)");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(number.getA(),eval.visit(tree).getA(), 1e-9);
+		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
+
+	}
+
+	@Test
+	public void testExpOperationMul() {
+		setup("1*e^(i*1.047197) * 1*e^(i*1.047197)");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		ComplexNumber res = number.mul(number);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
+	}
+
+	@Test
+	public void testExpOperationDiv() {
+		setup("1*e^(i*1.047197) / 1*e^(i*1.047197)");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		ComplexNumber res = number.div(number);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
+	}
+	
+	@Test
+	public void testExpOperationAdd() {
+		setup("1*e^(i*1.047197) + 1*e^(i*1.047197)");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		ComplexNumber res = number.add(number);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
+	}
+	
+	@Test
+	public void testExpOperationSub() {
+		setup("1*e^(i*1.047197) - 1*e^(i*1.047197)");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		ComplexNumber res = number.sub(number);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
+	}
+	
+	@Test
+	public void testExpOperationPriority() {
+		setup("1*e^(i*1.047197) - 1*e^(i*1.047197) / 1*e^(i*1.047197)");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		ComplexNumber res = number.div(number);
+		res = number.sub(res);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
+	}
+	
+	@Test
+	public void testExpOperationBrackets() {
+		setup("(1*e^(i*1.047197) - 1*e^(i*1.047197)) / 1*e^(i*1.047197)");
+		tree = parser.expr();
+		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		ComplexNumber res = number.sub(number);
+		res = res.div(number);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
+	}
 }

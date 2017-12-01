@@ -54,6 +54,13 @@ public class MainVisitor {
 		 }
 		 
 		 @Override
+		 public ComplexNumber visitExpComplex(CalculatorParser.ExpComplexContext ctx) {
+			 return ComplexNumber.convertPolar(
+					 visit(ctx.realNumber()).getA(),
+			         visit(ctx.expdegree()).getA()
+			         );
+		 }
+		 @Override
 		 public ComplexNumber visitRectComplex(CalculatorParser.RectComplexContext ctx) {
 			 ComplexNumber ret = new ComplexNumber(
 					 visit(ctx.realNumber(0)).getA(),
