@@ -17,16 +17,21 @@ RPAR  : ')';
 IMAG  : 'i';
 SQRT  : 'sqrt';
 RE    :  're';
+POW   : '^';
+EUL   : 'e' | 'E';
       
       
 complexNumber: (number) MULT? LPAR COS LPAR? (number) RPAR? PLUS IMAG MULT? SIN LPAR? (number) RPAR? RPAR #TrigComplex
              | LPAR realNumber sig=('-'| '+') (IMAG MULT? realNumber | realNumber MULT? IMAG) RPAR #RectComplex
+             | ((realNumber  MULT? EUL POW LPAR expdegree RPAR ) | ( EUL  POW  LPAR expdegree RPAR  MULT?  realNumber)) #ExpComplex
              | (IMAG MULT? realNumber | realNumber MULT? IMAG) #ImgNumber
              ;
 
 number: INT
       | DOUBLE
       ;
+
+expdegree: ( IMAG  MULT?  number ) | ( number  MULT?  IMAG );
       
 realNumber : MINUS number #NegativeNumber 
            | number #PositiveNumber 
