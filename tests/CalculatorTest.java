@@ -35,12 +35,20 @@ public class CalculatorTest {
 
 	@Test
 	public void testValidComplexNumber() {
-		setup("1(cos(1.047197)+isin(1.047197))");
+		setup("2.5(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
-		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
+		ComplexNumber number = ComplexNumber.convertPolar(2.5, 1.047197);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
 
+	}
+	
+	@Test(expected = ArithmeticException.class)
+	public void testInvalidComplexNumber() {
+		setup("2.5(cos(3.047197)+isin(1.047197))");
+		tree = parser.expr();
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+	    eval.visit(tree);
 	}
 
 	@Test
@@ -314,5 +322,14 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
+	}
+	
+	@Test
+	public void testSingleReAndIm() {
+	  setup("1 + 3i / 2 + 2 * 3i");
+	  tree = parser.expr();
+	  ComplexNumber n = new ComplexNumber(1, 7.5);
+	  MainVisitor.Visitor eval = new MainVisitor.Visitor();
+	  assertTrue(n.equals(eval.visit(tree)));
 	}
 }

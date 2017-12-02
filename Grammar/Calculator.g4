@@ -25,6 +25,7 @@ complexNumber: (number) MULT? LPAR COS LPAR? (number) RPAR? PLUS IMAG MULT? SIN 
              | LPAR realNumber sig=('-'| '+') (IMAG MULT? realNumber | realNumber MULT? IMAG) RPAR #RectComplex
              | ((realNumber  MULT? EUL POW LPAR expdegree RPAR ) | ( EUL  POW  LPAR expdegree RPAR  MULT?  realNumber)) #ExpComplex
              | (IMAG MULT? realNumber | realNumber MULT? IMAG) #ImgNumber
+             | realNumber #ReNumber
              ;
 
 number: INT

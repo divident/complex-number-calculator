@@ -18,7 +18,12 @@ public class MainVisitor {
 		 public ComplexNumber visitTrigComplex(CalculatorParser.TrigComplexContext ctx) {
 			 ComplexNumber mod = visit(ctx.number(0));
 			 ComplexNumber degree = visit(ctx.number(1));
-			 return ComplexNumber.convertPolar(mod.getA(), degree.getA());
+			 ComplexNumber degree2 = visit(ctx.number(2));
+			 if(degree.equals(degree2)) {
+				 return ComplexNumber.convertPolar(mod.getA(), degree.getA());
+			 } else {
+				 throw new ArithmeticException();
+			 }
 		 }
 		 @Override
 		 public ComplexNumber visitParens(CalculatorParser.ParensContext ctx) {
