@@ -42,13 +42,13 @@ public class CalculatorTest {
 		assertTrue(number.equals(eval.visit(tree)));
 
 	}
-	
+
 	@Test(expected = ArithmeticException.class)
 	public void testInvalidComplexNumber() {
 		setup("2.5(cos(3.047197)+isin(1.047197))");
 		tree = parser.expr();
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-	    eval.visit(tree);
+		eval.visit(tree);
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testOperationAdd() {
 		setup("1(cos(1.047197)+isin(1.047197)) + 1(cos(1.047197)+isin(1.047197))");
@@ -80,7 +80,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testOperationSub() {
 		setup("1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197))");
@@ -90,7 +90,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testOperationPriority() {
 		setup("1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197) / 1(cos(1.047197)+isin(1.047197))");
@@ -101,7 +101,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testOperationBrackets() {
 		setup("(1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197))) / 1(cos(1.047197)+isin(1.047197))");
@@ -112,7 +112,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testSqrtOperation() {
 		setup("sqrt(1(cos(1.047197)+isin(1.047197)))");
@@ -122,38 +122,38 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
-	
-    @Test 
-    public void testSqrtCompOperation() {
-    	setup("sqrt(1(cos(1.047197)+isin(1.047197))) + 1(cos(1.047197)+isin(1.047197))");
+
+	@Test
+	public void testSqrtCompOperation() {
+		setup("sqrt(1(cos(1.047197)+isin(1.047197))) + 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		number = number.sqrt();
 		number = number.add(ComplexNumber.convertPolar(1, 1.047197));
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
-    }
-    
-    @Test
-    public void testSqrtExpresion() {
-    	setup("sqrt(1(cos(1.047197)+isin(1.047197)) * 1(cos(1.047197)+isin(1.047197)))");
+	}
+
+	@Test
+	public void testSqrtExpresion() {
+		setup("sqrt(1(cos(1.047197)+isin(1.047197)) * 1(cos(1.047197)+isin(1.047197)))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		number = number.mul(number);
 		number = number.sqrt();
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
-    }
-    
+	}
+
 	@Test
 	public void testValidRectComplexNumber() {
 		setup("(-5 - i7)");
 		tree = parser.expr();
 		ComplexNumber number = new ComplexNumber(-5, -7);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-        assertTrue(number.equals(eval.visit(tree)));
+		assertTrue(number.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testValidRectComplexNumberAddOperation() {
 		setup("(5 + 7i) + (5 + 7i)");
@@ -162,7 +162,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testValidRectComplexNumberMinusOperation() {
 		setup("(5.5 + 7i) - (2.5+ 2i)");
@@ -171,7 +171,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testValidRectComplexNumberMulOperation() {
 		setup("(5 + 7i) * (2.0 + 2i)");
@@ -180,7 +180,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testValidRectComplexNumberDivOperation() {
 		setup("(5 + 7i) / (2 + 2i)");
@@ -189,7 +189,7 @@ public class CalculatorTest {
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
-	
+
 	@Test
 	public void testValidRectComplexNumberSqrtOperation() {
 		setup("sqrt(2.0 + 2i)");
@@ -199,7 +199,7 @@ public class CalculatorTest {
 		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
 	}
-	
+
 	@Test
 	public void testValidImgNumber() {
 		setup("4i");
@@ -211,7 +211,7 @@ public class CalculatorTest {
 		setup("i-4");
 		tree = parser.expr();
 		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
-		assertEquals(number.getB(), -1*eval.visit(tree).getB(), 1e-9);
+		assertEquals(number.getB(), -1 * eval.visit(tree).getB(), 1e-9);
 		setup("4*i");
 		tree = parser.expr();
 		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
@@ -219,9 +219,9 @@ public class CalculatorTest {
 		setup("i*-4");
 		tree = parser.expr();
 		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
-		assertEquals(number.getB(), -1*eval.visit(tree).getB(), 1e-9);
+		assertEquals(number.getB(), -1 * eval.visit(tree).getB(), 1e-9);
 	}
-	
+
 	@Test
 	public void testValidImgNumberOper() {
 		setup("4i * (2 - 2i)");
@@ -237,7 +237,7 @@ public class CalculatorTest {
 		assertTrue(c.equals(eval.visit(tree)));
 		setup("sqrt(4i) + 2i *(-2 -2i)");
 		ComplexNumber d = new ComplexNumber(0, 2);
-		b.setA(-1*b.getA());
+		b.setA(-1 * b.getA());
 		c = a.sqrt();
 		d = d.mul(b);
 		c = c.add(d);
@@ -251,7 +251,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
-		assertEquals(number.getA(),eval.visit(tree).getA(), 1e-9);
+		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
 
 	}
@@ -277,7 +277,7 @@ public class CalculatorTest {
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
-	
+
 	@Test
 	public void testExpOperationAdd() {
 		setup("1*e^(i*1.047197) + 1*e^(i*1.047197)");
@@ -288,7 +288,7 @@ public class CalculatorTest {
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
-	
+
 	@Test
 	public void testExpOperationSub() {
 		setup("1*e^(i*1.047197) - 1*e^(i*1.047197)");
@@ -299,7 +299,7 @@ public class CalculatorTest {
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
-	
+
 	@Test
 	public void testExpOperationPriority() {
 		setup("1*e^(i*1.047197) - 1*e^(i*1.047197) / 1*e^(i*1.047197)");
@@ -311,7 +311,7 @@ public class CalculatorTest {
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
-	
+
 	@Test
 	public void testExpOperationBrackets() {
 		setup("(1*e^(i*1.047197) - 1*e^(i*1.047197)) / 1*e^(i*1.047197)");
@@ -323,13 +323,47 @@ public class CalculatorTest {
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
-	
+
 	@Test
 	public void testSingleReAndIm() {
-	  setup("1 + 3i / 2 + 2 * 3i");
-	  tree = parser.expr();
-	  ComplexNumber n = new ComplexNumber(1, 7.5);
-	  MainVisitor.Visitor eval = new MainVisitor.Visitor();
-	  assertTrue(n.equals(eval.visit(tree)));
+		setup("1 + 3i / 2 + 2 * 3i");
+		tree = parser.expr();
+		ComplexNumber n = new ComplexNumber(1, 7.5);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertTrue(n.equals(eval.visit(tree)));
+	}
+
+	@Test
+	public void testOperatorRe() {
+		setup("re(1+ 3i + 2 + 4i)");
+		tree = parser.expr();
+		ComplexNumber n = new ComplexNumber(3, 0);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(n.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(n.getB(), eval.visit(tree).getB(), 1e-9);
+		setup("RE(1 + 3i + 7i)");
+		n = new ComplexNumber(1, 0);
+		tree = parser.expr();
+		assertEquals(n.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(n.getB(), eval.visit(tree).getB(), 1e-9);
+	}
+
+	@Test
+	public void testOperatorIm() {
+		setup("im((1*e^(i*1.047197) - 1*e^(i*1.047197)) / 1*e^(i*1.047197))");
+		tree = parser.expr();
+		ComplexNumber n = ComplexNumber.convertPolar(0, 1.047197);
+		n.setA(0);
+		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		assertEquals(n.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(n.getB(), eval.visit(tree).getB(), 1e-9);
+		setup("IM((1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197))) / 1(cos(1.047197)+isin(1.047197)))");
+		n = ComplexNumber.convertPolar(1, 1.047197);
+		ComplexNumber res = n.sub(n);
+		res = res.div(n);
+		res.setA(0);
+		tree = parser.expr();
+		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
+		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
 }

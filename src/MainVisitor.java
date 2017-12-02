@@ -30,6 +30,7 @@ public class MainVisitor {
 			 return visit(ctx.expr());
 		 }
 		 
+		 
 		 @Override
 		 public ComplexNumber visitMulDiv(CalculatorParser.MulDivContext ctx) {
 			 ComplexNumber left = visit(ctx.expr(0));
@@ -96,6 +97,17 @@ public class MainVisitor {
 			 c.setA(0);
 			 return c;
 		 }
+		 
+		 @Override
+		 public ComplexNumber visitOpComplex(CalculatorParser.OpComplexContext ctx) {
+			 ComplexNumber c = visit(ctx.expr());
+			 if(ctx.op.getType() == CalculatorParser.IM) {
+				 c.setA(0);
+			 } else {
+				 c.setB(0);
+			 }
+			 return c;
+		 } 
 	 }
 	 public static void main(String[] args) throws Exception {
 	        String input = null;

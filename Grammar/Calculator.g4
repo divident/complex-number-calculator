@@ -16,7 +16,8 @@ LPAR  : '(';
 RPAR  : ')';
 IMAG  : 'i';
 SQRT  : 'sqrt';
-RE    :  're';
+RE    :  're' | 'RE';
+IM	  :  'im' | 'IM';
 POW   : '^';
 EUL   : 'e' | 'E';
       
@@ -42,10 +43,13 @@ sqrtComplex: SQRT LPAR expr RPAR
            | SQRT expr
            ;
 
+opComplex  : op=(RE|IM) expr;
+
 expr: '('expr')' # Parens
     | expr op=('*'|'/') expr # MulDiv
     | expr op=('+'|'-') expr # AddSub
     | sqrtComplex #Sqrt
     | complexNumber # Complex
+    | opComplex # Operator
     ;
 
