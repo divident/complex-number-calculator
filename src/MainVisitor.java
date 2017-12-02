@@ -22,7 +22,7 @@ public class MainVisitor {
 			 if(degree.equals(degree2)) {
 				 return ComplexNumber.convertPolar(mod.getA(), degree.getA());
 			 } else {
-				 throw new ArithmeticException();
+				 throw new ArithmeticException("Degrees must be equal");
 			 }
 		 }
 		 @Override
@@ -116,8 +116,12 @@ public class MainVisitor {
 	        out.println("\nNumber of syntax errors: " + errors);
 
 	        if (0 == errors) {
+	        try {
 		        Visitor eval = new Visitor();
-		        out.print(eval.visit(tree).toString());	  
+		        out.print(eval.visit(tree).toString());	
+	        } catch(Exception e) {
+	        	out.print(e.getMessage());
+	        }
 	        }
 	 }
 }
