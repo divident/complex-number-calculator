@@ -69,6 +69,25 @@ public class ComplexNumberTest {
 	  c = c.sqrt();
 	  assertEquals(1.0986841134678098, c.getA(), 1e-9);
 	  assertEquals(0.4550898605622273, c.getB(), 1e-9);
+	  
+	  ComplexNumber a = new ComplexNumber(4, 0);
+	  a = a.sqrt();
+	  assertEquals(2.0, a.getA(), 1e-9);
+	  assertEquals(0.0, a.getB(), 1e-9);
+	  
+	  a.setA(-1);
+	  a.setB(0);
+	  a = a.sqrt();
+	  assertEquals(0.0, a.getA(), 1e-9);
+	  assertEquals(1.0, a.getB(), 1e-9);
+	  
+	  a.setA(0);
+	  a.setB(8.0);
+	  a = a.sqrt();
+	  
+	  assertEquals(2.0, a.getA(), 1e-9);
+	  assertEquals(2.0, a.getB(), 1e-9);
+	  
 	}
 	
 }

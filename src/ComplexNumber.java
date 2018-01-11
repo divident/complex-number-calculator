@@ -45,6 +45,10 @@ public class ComplexNumber {
 		return new ComplexNumber(tmp.a / d, tmp.b / d);
 	}
 
+	public double arg() {
+		return Math.atan2(b, a);
+	}
+
 	public ComplexNumber con() {
 		return new ComplexNumber(this.a, -1 * this.b);
 	}
@@ -52,16 +56,13 @@ public class ComplexNumber {
 	public double mod() {
 		return Math.sqrt(this.a * this.a + this.b * this.b);
 	}
-	
+
 	public ComplexNumber sqrt() {
-		double mod = this.mod();
-		double sin = this.getA()/mod;
-		double degree = Math.asin(sin);
-		mod = Math.sqrt(mod);
-		double tmp = degree/2;
-		return convertPolar(mod, tmp);
+		double r = Math.sqrt(this.mod());
+		double theta = this.arg() / 2;
+		return new ComplexNumber(r * Math.cos(theta), r * Math.sin(theta));
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ComplexNumber [Re=" + a + ", Im=" + b + "]";
@@ -94,6 +95,5 @@ public class ComplexNumber {
 			return false;
 		return true;
 	}
-	
-	
+
 }

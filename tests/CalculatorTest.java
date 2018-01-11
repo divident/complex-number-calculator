@@ -40,6 +40,11 @@ public class CalculatorTest {
 		ComplexNumber number = ComplexNumber.convertPolar(2.5, 1.047197);
 		MainVisitor.Visitor eval = new MainVisitor.Visitor();
 		assertTrue(number.equals(eval.visit(tree)));
+		
+		setup("2.5(cos1.047197+isin1.047197)");
+		tree = parser.expr();
+		eval = new MainVisitor.Visitor();
+		assertTrue(number.equals(eval.visit(tree)));
 
 	}
 
