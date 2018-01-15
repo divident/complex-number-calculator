@@ -65,3 +65,4 @@ $RECYCLE.BIN/
 # Antlr
 target/
 Grammar/out
+lib/

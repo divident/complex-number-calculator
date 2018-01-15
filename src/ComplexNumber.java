@@ -10,6 +10,10 @@ public class ComplexNumber {
 	public static ComplexNumber convertPolar(double z, double degree) {
 		return new ComplexNumber(z * Math.cos(degree), z * Math.sin(degree));
 	}
+	
+	public static ComplexNumber convertPolar(double z, double degree1, double degree2) {
+		return new ComplexNumber(z * Math.cos(degree1), z * Math.sin(degree2));
+	}
 
 	public double getA() {
 		return a;
@@ -61,6 +65,16 @@ public class ComplexNumber {
 		double r = Math.sqrt(this.mod());
 		double theta = this.arg() / 2;
 		return new ComplexNumber(r * Math.cos(theta), r * Math.sin(theta));
+	}
+	
+	public ComplexNumber imPart() {
+		this.setA(0);
+		return this;
+	}
+	
+	public ComplexNumber rePart() {
+		this.setB(0);
+		return this;
 	}
 
 	@Override

@@ -90,4 +90,19 @@ public class ComplexNumberTest {
 	  
 	}
 	
+	@Test
+	public void testImPart() {
+		ComplexNumber c = new ComplexNumber(2.1, 3.0);
+		c = c.imPart();
+		assertEquals(c.getA(), 0.0, 1e-9);
+		assertEquals(c.getB(), 3.0, 1e-9);
+	}
+	
+	@Test
+	public void testRePart() {
+		ComplexNumber c = new ComplexNumber(2.1, 3.0);
+		c = c.rePart();
+		assertEquals(c.getA(), 2.1, 1e-9);
+		assertEquals(c.getB(), 0.0, 1e-9);
+	}
 }

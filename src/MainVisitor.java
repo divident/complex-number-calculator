@@ -6,8 +6,7 @@ import java.util.Scanner;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
-public class MainVisitor {
-	static class Visitor extends CalculatorBaseVisitor<ComplexNumber> {
+public class MainVisitor extends CalculatorBaseVisitor<ComplexNumber> {
 		 
 		 @Override
 		 public ComplexNumber visitNumber(CalculatorParser.NumberContext ctx) {
@@ -16,14 +15,18 @@ public class MainVisitor {
 		 
 		 @Override
 		 public ComplexNumber visitTrigComplex(CalculatorParser.TrigComplexContext ctx) {
-			 ComplexNumber mod = visit(ctx.number(0));
-			 ComplexNumber degree = visit(ctx.number(1));
-			 ComplexNumber degree2 = visit(ctx.number(2));
+			 ComplexNumber mod = visit(ctx.realNumber(0));
+			 ComplexNumber degree = visit(ctx.realNumber(1));
+			 ComplexNumber degree2 = visit(ctx.realNumber(2));
+			 if(mod.getA() < 0) {
+				 throw new ArithmeticException("Mod must be positive number"); 
+			 }
 			 if(degree.equals(degree2)) {
 				 return ComplexNumber.convertPolar(mod.getA(), degree.getA());
 			 } else {
 				 throw new ArithmeticException("Degrees must be equal");
 			 }
+			
 		 }
 		 @Override
 		 public ComplexNumber visitParens(CalculatorParser.ParensContext ctx) {
@@ -109,31 +112,3 @@ public class MainVisitor {
 			 return c;
 		 } 
 	 }
-	 public static void main(String[] args) throws Exception {
-	        String input = null;
-	        out.println("Key in the input string:");
-	        try (Scanner reader = new Scanner(System.in)) {
-	            input = reader.nextLine();
-	        }
-	        CharStream charStream = CharStreams.fromString(input);
-	        CalculatorLexer lexer = new CalculatorLexer(charStream);
-	        CommonTokenStream tokens = new CommonTokenStream(lexer);
-	        //System.out.println(tokens.getText());
-
-	        CalculatorParser parser = new CalculatorParser(tokens);
-	        parser.setBuildParseTree(true);
-	        ParseTree tree = parser.expr();
-	        int errors = parser.getNumberOfSyntaxErrors();
-
-	        out.println("\nNumber of syntax errors: " + errors);
-
-	        if (0 == errors) {
-	        try {
-		        Visitor eval = new Visitor();
-		        out.print(eval.visit(tree).toString());	
-	        } catch(Exception e) {
-	        	out.print(e.getMessage());
-	        }
-	        }
-	 }
-}

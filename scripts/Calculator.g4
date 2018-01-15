@@ -22,19 +22,12 @@ POW   : '^';
 EUL   : 'e' | 'E';
       
       
-complexNumber: (((number) MULT? LPAR COS LPAR (number) RPAR PLUS IMAG MULT? SIN LPAR (number)) RPAR RPAR 
-				| ((number) MULT? LPAR COS  (number)  PLUS IMAG MULT? SIN  (number) RPAR)) 			#TrigComplex
-             | LPAR realNumber sig=('-'| '+') (IMAG MULT? realNumber | realNumber MULT? IMAG) RPAR #RectComplex
-             | ((realNumber  MULT? EUL POW LPAR expdegree RPAR ) | ( EUL  POW  LPAR expdegree RPAR  MULT?  realNumber)) #ExpComplex
-             | (IMAG MULT? realNumber | realNumber MULT? IMAG) #ImgNumber
-             | realNumber #ReNumber
-             ;
 
 number: INT
       | DOUBLE
       ;
 
-expdegree: ( IMAG  MULT?  number ) | ( number  MULT?  IMAG );
+expdegree: ( IMAG  MULT?  realNumber ) | ( realNumber  MULT?  IMAG );
       
 realNumber : MINUS number #NegativeNumber 
            | number #PositiveNumber 
@@ -54,3 +47,10 @@ expr: '('expr')' # Parens
     | opComplex # Operator
     ;
 
+complexNumber: (((realNumber) MULT? LPAR COS LPAR (realNumber) RPAR PLUS IMAG MULT? SIN LPAR (realNumber)) RPAR RPAR 
+				| ((realNumber) MULT? LPAR COS  (realNumber)  PLUS IMAG MULT? SIN  (realNumber) RPAR)) 			#TrigComplex
+             | LPAR realNumber sig=('-'| '+') (IMAG MULT? realNumber | realNumber MULT? IMAG) RPAR #RectComplex
+             | ((realNumber  MULT? EUL POW LPAR expdegree RPAR ) | ( EUL  POW  LPAR expdegree RPAR  MULT?  realNumber)) #ExpComplex
+             | (IMAG MULT? realNumber | realNumber MULT? IMAG) #ImgNumber
+             | realNumber #ReNumber
+             ;

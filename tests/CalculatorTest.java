@@ -38,12 +38,12 @@ public class CalculatorTest {
 		setup("2.5(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(2.5, 1.047197);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 		
 		setup("2.5(cos1.047197+isin1.047197)");
 		tree = parser.expr();
-		eval = new MainVisitor.Visitor();
+		eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 
 	}
@@ -52,9 +52,18 @@ public class CalculatorTest {
 	public void testInvalidComplexNumber() {
 		setup("2.5(cos(3.047197)+isin(1.047197))");
 		tree = parser.expr();
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		eval.visit(tree);
 	}
+	
+	@Test(expected = ArithmeticException.class)
+	public void testInvalidMod() {
+		setup("-2.5(cos(3.047197)+isin(1.047197))");
+		tree = parser.expr();
+		MainVisitor eval = new MainVisitor();
+		eval.visit(tree);
+	}
+	
 
 	@Test
 	public void testOperationMul() {
@@ -62,7 +71,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.mul(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
 
@@ -72,7 +81,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.div(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
 
@@ -82,7 +91,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.add(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
 
@@ -92,18 +101,18 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.sub(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
 
 	@Test
 	public void testOperationPriority() {
-		setup("1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197) / 1(cos(1.047197)+isin(1.047197))");
+		setup("1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197)) / 1(cos(1.047197)+isin(1.047197))");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.div(number);
 		res = number.sub(res);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
 
@@ -114,7 +123,7 @@ public class CalculatorTest {
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.sub(number);
 		res = res.div(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(res.equals(eval.visit(tree)));
 	}
 
@@ -124,7 +133,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		number = number.sqrt();
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
 
@@ -135,7 +144,7 @@ public class CalculatorTest {
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		number = number.sqrt();
 		number = number.add(ComplexNumber.convertPolar(1, 1.047197));
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
 
@@ -146,7 +155,7 @@ public class CalculatorTest {
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		number = number.mul(number);
 		number = number.sqrt();
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
 
@@ -155,7 +164,7 @@ public class CalculatorTest {
 		setup("(-5 - i7)");
 		tree = parser.expr();
 		ComplexNumber number = new ComplexNumber(-5, -7);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
 
@@ -164,7 +173,7 @@ public class CalculatorTest {
 		setup("(5 + 7i) + (5 + 7i)");
 		tree = parser.expr();
 		ComplexNumber number = new ComplexNumber(10, 14);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
 
@@ -173,7 +182,7 @@ public class CalculatorTest {
 		setup("(5.5 + 7i) - (2.5+ 2i)");
 		tree = parser.expr();
 		ComplexNumber number = new ComplexNumber(3, 5);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
 
@@ -182,7 +191,7 @@ public class CalculatorTest {
 		setup("(5 + 7i) * (2.0 + 2i)");
 		tree = parser.expr();
 		ComplexNumber number = new ComplexNumber(-4, 24);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
 
@@ -191,7 +200,7 @@ public class CalculatorTest {
 		setup("(5 + 7i) / (2 + 2i)");
 		tree = parser.expr();
 		ComplexNumber number = new ComplexNumber(3, 0.5);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(number.equals(eval.visit(tree)));
 	}
 
@@ -200,7 +209,7 @@ public class CalculatorTest {
 		setup("sqrt(2.0 + 2i)");
 		tree = parser.expr();
 		ComplexNumber number = new ComplexNumber(1.5537739740300374, 0.6435942529055826);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
 	}
@@ -210,7 +219,7 @@ public class CalculatorTest {
 		setup("4i");
 		tree = parser.expr();
 		ComplexNumber number = new ComplexNumber(0, 4);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
 		setup("i-4");
@@ -231,7 +240,7 @@ public class CalculatorTest {
 	public void testValidImgNumberOper() {
 		setup("4i * (2 - 2i)");
 		tree = parser.expr();
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		ComplexNumber a = new ComplexNumber(0, 4);
 		ComplexNumber b = new ComplexNumber(2, -2);
 		ComplexNumber c = a.mul(b);
@@ -255,7 +264,7 @@ public class CalculatorTest {
 		setup("1*e^(i*1.047197)");
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(number.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(number.getB(), eval.visit(tree).getB(), 1e-9);
 
@@ -267,7 +276,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.mul(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
@@ -278,7 +287,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.div(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
@@ -289,7 +298,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.add(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
@@ -300,7 +309,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.sub(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
@@ -312,7 +321,7 @@ public class CalculatorTest {
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.div(number);
 		res = number.sub(res);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
@@ -324,7 +333,7 @@ public class CalculatorTest {
 		ComplexNumber number = ComplexNumber.convertPolar(1, 1.047197);
 		ComplexNumber res = number.sub(number);
 		res = res.div(number);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
@@ -334,7 +343,7 @@ public class CalculatorTest {
 		setup("1 + 3i / 2 + 2 * 3i");
 		tree = parser.expr();
 		ComplexNumber n = new ComplexNumber(1, 7.5);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertTrue(n.equals(eval.visit(tree)));
 	}
 
@@ -343,7 +352,7 @@ public class CalculatorTest {
 		setup("re(1+ 3i + 2 + 4i)");
 		tree = parser.expr();
 		ComplexNumber n = new ComplexNumber(3, 0);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(n.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(n.getB(), eval.visit(tree).getB(), 1e-9);
 		setup("RE(1 + 3i + 7i)");
@@ -359,7 +368,7 @@ public class CalculatorTest {
 		tree = parser.expr();
 		ComplexNumber n = ComplexNumber.convertPolar(0, 1.047197);
 		n.setA(0);
-		MainVisitor.Visitor eval = new MainVisitor.Visitor();
+		MainVisitor eval = new MainVisitor();
 		assertEquals(n.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(n.getB(), eval.visit(tree).getB(), 1e-9);
 		setup("IM((1(cos(1.047197)+isin(1.047197)) - 1(cos(1.047197)+isin(1.047197))) / 1(cos(1.047197)+isin(1.047197)))");
@@ -371,4 +380,5 @@ public class CalculatorTest {
 		assertEquals(res.getA(), eval.visit(tree).getA(), 1e-9);
 		assertEquals(res.getB(), eval.visit(tree).getB(), 1e-9);
 	}
+	
 }
