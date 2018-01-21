@@ -20,8 +20,11 @@ RE    :  're' | 'RE';
 IM	  :  'im' | 'IM';
 POW   : '^';
 EUL   : 'e' | 'E';
-      
-      
+CHAR	  : [a-zA-Z];     
+
+identifier
+  :  CHAR
+  ;      
 
 number: INT
       | DOUBLE
@@ -46,6 +49,7 @@ expr: '('expr')' # Parens
     | complexNumber # Complex
     | opComplex # Operator
     ;
+    
 
 complexNumber: (((realNumber) MULT? LPAR COS LPAR (realNumber) RPAR PLUS IMAG MULT? SIN LPAR (realNumber)) RPAR RPAR 
 				| ((realNumber) MULT? LPAR COS  (realNumber)  PLUS IMAG MULT? SIN  (realNumber) RPAR)) 			#TrigComplex
@@ -53,4 +57,5 @@ complexNumber: (((realNumber) MULT? LPAR COS LPAR (realNumber) RPAR PLUS IMAG MU
              | ((realNumber  MULT? EUL POW LPAR expdegree RPAR ) | ( EUL  POW  LPAR expdegree RPAR  MULT?  realNumber)) #ExpComplex
              | (IMAG MULT? realNumber | realNumber MULT? IMAG) #ImgNumber
              | realNumber #ReNumber
+             | identifier #Var
              ;

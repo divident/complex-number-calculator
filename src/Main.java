@@ -16,6 +16,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
+
 public class Main {
 	private static final DecimalFormat _format = new DecimalFormat();
 
@@ -50,7 +51,7 @@ public class Main {
 
 		if (0 == errors) {
 			try {
-				MainVisitor eval = new MainVisitor();
+				TreeVisitor eval = new TreeVisitor();
 				out.print(eval.visit(tree).toString());
 			} catch (Exception e) {
 				out.print(e.getMessage());

@@ -1,13 +1,9 @@
 
-import static java.lang.System.out;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.Scanner;
-
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.*;
-
-public class MainVisitor extends CalculatorBaseVisitor<ComplexNumber> {
-		 
+public class TreeVisitor extends CalculatorBaseVisitor<ComplexNumber> {
+		 public Map<String, ComplexNumber> variables = new HashMap<String, ComplexNumber>();
 		 @Override
 		 public ComplexNumber visitNumber(CalculatorParser.NumberContext ctx) {
 			 return new ComplexNumber(Double.parseDouble(ctx.getText()), 0);
@@ -110,5 +106,12 @@ public class MainVisitor extends CalculatorBaseVisitor<ComplexNumber> {
 				 c.setB(0);
 			 }
 			 return c;
-		 } 
+		 }
+		 
+		 @Override
+		 public ComplexNumber visitVar(CalculatorParser.VarContext ctx) {
+			 ComplexNumber var = variables.get(ctx.getText());
+			 if(var == null) throw new IllegalArgumentException();
+			 return var;
+		 }
 	 }
