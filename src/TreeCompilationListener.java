@@ -1,6 +1,5 @@
 import java.text.ParseException;
 
-import org.antlr.v4.runtime.misc.NotNull;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -44,7 +43,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 			this._maxTreeDepth = this._currentTreeDepth;
 
 		try {
-			this._mv.visitLdcInsn(Main.parse(ctx.getText()));
+			this._mv.visitLdcInsn(TreeMain.parse(ctx.getText()));
 		} catch (ParseException e) {
 			throw new IllegalArgumentException("Number is not of the double type.");
 		}
@@ -56,7 +55,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 		this._maxTreeDepth = Math.max(this._currentTreeDepth, this._maxTreeDepth);
 
 		try {
-			this._mv.visitLdcInsn(Main.parse(ctx.getText()));
+			this._mv.visitLdcInsn(TreeMain.parse(ctx.getText()));
 		} catch (ParseException e) {
 			throw new IllegalArgumentException("Number is not of the double type.");
 		}
@@ -77,7 +76,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 		this._mv.visitTypeInsn(Opcodes.NEW, "ComplexNumber");
 		this._mv.visitInsn(Opcodes.DUP);
 		try {
-			this._mv.visitLdcInsn(Main.parse("0.0"));
+			this._mv.visitLdcInsn(TreeMain.parse("0.0"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -92,7 +91,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 	@Override
 	public void exitReNumber(CalculatorParser.ReNumberContext ctx) {
 		try {
-			this._mv.visitLdcInsn(Main.parse("0.0"));
+			this._mv.visitLdcInsn(TreeMain.parse("0.0"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

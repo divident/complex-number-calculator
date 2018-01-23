@@ -111,7 +111,7 @@ public class TreeVisitor extends CalculatorBaseVisitor<ComplexNumber> {
 		 @Override
 		 public ComplexNumber visitVar(CalculatorParser.VarContext ctx) {
 			 ComplexNumber var = variables.get(ctx.getText());
-			 if(var == null) throw new IllegalArgumentException();
+			 if(var == null) throw new IllegalArgumentException("Given varaible doesn't exist");
 			 return var;
 		 }
 	 }
