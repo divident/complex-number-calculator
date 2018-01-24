@@ -31,6 +31,7 @@ public class Application {
 	private JList<ClassMethod> listMethods;
 	private ListSelectionModel listSelectionModel;
 	private JTextPane textDesc;
+	private JButton btnCompile;
 	private Map<String, String> methodDesc;
 	/**
 	 * Launch the application.
@@ -134,7 +135,9 @@ public class Application {
 					try {
 					getVariables(textVar.getText());
 					textResult.setText(treeMain.eval(textExpr.getText()));
+					btnCompile.setEnabled(true);
 					} catch (IllegalArgumentException ex) {
+						ex.printStackTrace();
 						textResult.setText(ex.getMessage());
 					} 
 				}
@@ -162,6 +165,16 @@ public class Application {
 		JLabel lblDescription = new JLabel("Description");
 		lblDescription.setBounds(384, 186, 66, 14);
 		frame.getContentPane().add(lblDescription);
+		
+		btnCompile = new JButton("Compile");
+		btnCompile.setEnabled(false);
+		btnCompile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				treeMain.compile();
+			}
+		});
+		btnCompile.setBounds(461, 337, 89, 23);
+		frame.getContentPane().add(btnCompile);
 	}
 	
 	private void getVariables(String input) {

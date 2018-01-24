@@ -6,7 +6,7 @@ import org.objectweb.asm.Opcodes;
 public class TreeCompilationListener extends CalculatorBaseListener {
 	private final MethodVisitor _mv;
 	private int _currentTreeDepth, _maxTreeDepth;
-
+	private int variablesCounter = 0;
 	public int getTreeDepth() {
 		return this._maxTreeDepth;
 	}
@@ -63,7 +63,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 
 	@Override
 	public void enterReNumber(CalculatorParser.ReNumberContext ctx) {
-		this._currentTreeDepth+=2;
+		this._currentTreeDepth += 2;
 		this._maxTreeDepth = Math.max(this._currentTreeDepth, this._maxTreeDepth);
 		this._mv.visitTypeInsn(Opcodes.NEW, "ComplexNumber");
 		this._mv.visitInsn(Opcodes.DUP);
@@ -71,7 +71,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 
 	@Override
 	public void enterImgNumber(CalculatorParser.ImgNumberContext ctx) {
-		this._currentTreeDepth+=2;
+		this._currentTreeDepth += 2;
 		this._maxTreeDepth = Math.max(this._currentTreeDepth, this._maxTreeDepth);
 		this._mv.visitTypeInsn(Opcodes.NEW, "ComplexNumber");
 		this._mv.visitInsn(Opcodes.DUP);
@@ -82,7 +82,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 		}
 
 	}
-	
+
 	@Override
 	public void exitImgNumber(CalculatorParser.ImgNumberContext ctx) {
 		this._mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "ComplexNumber", "<init>", "(DD)V", false);
@@ -97,12 +97,12 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 		}
 		this._mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "ComplexNumber", "<init>", "(DD)V", false);
 	}
-	
-	
-	@Override public void exitExpComplex(CalculatorParser.ExpComplexContext ctx) { 
+
+	@Override
+	public void exitExpComplex(CalculatorParser.ExpComplexContext ctx) {
 		this._mv.visitMethodInsn(Opcodes.INVOKESTATIC, "ComplexNumber", "convertPolar", "(DD)LComplexNumber;", false);
 	}
-	
+
 	@Override
 	public void exitAddSub(CalculatorParser.AddSubContext ctx) {
 		if (ctx.op.getType() == CalculatorParser.PLUS) {
@@ -114,10 +114,10 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 		}
 		this._currentTreeDepth--;
 	}
-	
+
 	@Override
 	public void exitMulDiv(CalculatorParser.MulDivContext ctx) {
-		if(ctx.op.getType() == CalculatorParser.MULT) {
+		if (ctx.op.getType() == CalculatorParser.MULT) {
 			this._mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "ComplexNumber", "mul", "(LComplexNumber;)LComplexNumber;",
 					false);
 		} else {
@@ -126,23 +126,40 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 		}
 		this._currentTreeDepth--;
 	}
-	
-	@Override 
+
+	@Override
 	public void exitSqrt(CalculatorParser.SqrtContext ctx) {
-		this._mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "ComplexNumber", "sqrt", "()LComplexNumber;",
-				false);
+		this._mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "ComplexNumber", "sqrt", "()LComplexNumber;", false);
 		this._currentTreeDepth--;
 	}
-	
+
 	@Override
 	public void exitOpComplex(CalculatorParser.OpComplexContext ctx) {
-		if(ctx.op.getType() == CalculatorParser.IM) {
-			this._mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "ComplexNumber", "imPart", "()LComplexNumber;",
-					false);
+		if (ctx.op.getType() == CalculatorParser.IM) {
+			this._mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "ComplexNumber", "imPart", "()LComplexNumber;", false);
 		} else {
-			this._mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "ComplexNumber", "rePart", "()LComplexNumber;",
-					false);
+			this._mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "ComplexNumber", "rePart", "()LComplexNumber;", false);
 		}
 		this._currentTreeDepth--;
 	}
+
+	@Override
+	public void enterIdentifier(CalculatorParser.IdentifierContext ctx) {
+		this._currentTreeDepth+=3;
+		this._maxTreeDepth = Math.max(this._currentTreeDepth, this._maxTreeDepth);
+		this._mv.visitTypeInsn(Opcodes.NEW, "ComplexNumber");
+		this._mv.visitInsn(Opcodes.DUP);
+		pushVaraibleOnStack();
+		pushVaraibleOnStack();
+		this._mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "ComplexNumber", "<init>", "(DD)V", false);
+		
+	}
+
+	private void pushVaraibleOnStack() {
+		this._mv.visitVarInsn(Opcodes.ALOAD, 0);
+		this._mv.visitIntInsn(Opcodes.BIPUSH, variablesCounter++);
+		this._mv.visitInsn(Opcodes.AALOAD);
+		this._mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/Double", "parseDouble", "(Ljava/lang/String;)D", false);
+	}
+	
 }

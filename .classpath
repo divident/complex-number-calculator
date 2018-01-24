@@ -18,9 +18,11 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="target/generated-sources/antlr4"/>
-	<classpathentry kind="lib" path="C:/Users/Piotr/eclipse-workspace/complex-number-calculator/lib/antlr-4.7-complete.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Piotr/eclipse-workspace/complex-number-calculator/lib/asm-5.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Piotr/eclipse-workspace/complex-number-calculator/lib/asm-util-5.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -19,6 +19,8 @@ import org.objectweb.asm.ClassWriter;
 public class TreeMain {
 	private static final DecimalFormat _format = new DecimalFormat();
 	private TreeVisitor eval;
+	private ParseTree tree;
+	
 	static {
 		DecimalFormatSymbols _symbols = new DecimalFormatSymbols();
 		_symbols.setDecimalSeparator('.');
@@ -43,7 +45,7 @@ public class TreeMain {
 
 		CalculatorParser parser = new CalculatorParser(tokens);
 		parser.setBuildParseTree(true);
-		ParseTree tree = parser.expr();
+		tree = parser.expr();
 		int errors = parser.getNumberOfSyntaxErrors();
 
 		if (0 == errors) {
@@ -59,11 +61,11 @@ public class TreeMain {
 		}
 	}
 
-	private static void compile(ParseTree tree) {
+	public void compile() {
 		compile(tree, "target/classes/CompilationClass.class");
 	}
 
-	private static void compile(ParseTree tree, String classPath) {
+	public void compile(ParseTree tree, String classPath) {
 		if (null == tree)
 			throw new NullPointerException("parse tree cannot be null.");
 
