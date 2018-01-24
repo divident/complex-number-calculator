@@ -1,16 +1,22 @@
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.script.ScriptException;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextPane;
+import java.awt.event.ActionListener;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.script.ScriptException;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class Application {
 
@@ -21,6 +27,11 @@ public class Application {
 	private JTextField textExpr;
 	private JTextPane textResult;
 	private JTextPane textVar;
+	private DefaultListModel<ClassMethod> listModel;
+	private JList<ClassMethod> listMethods;
+	private ListSelectionModel listSelectionModel;
+	private JTextPane textDesc;
+	private Map<String, String> methodDesc;
 	/**
 	 * Launch the application.
 	 */
@@ -42,6 +53,8 @@ public class Application {
 	 */
 	public Application() {
 		initialize();
+		methodDesc = MethodReader.getMethods();
+		updateList();
 		frame.setTitle("Complex nubmer calculator");
 		treeMain = new TreeMain();
 		try {
@@ -118,13 +131,37 @@ public class Application {
 		btnCalculate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!textVar.getText().isEmpty()) {
+					try {
 					getVariables(textVar.getText());
+					textResult.setText(treeMain.eval(textExpr.getText()));
+					} catch (IllegalArgumentException ex) {
+						textResult.setText(ex.getMessage());
+					} 
 				}
-				textResult.setText(treeMain.eval(textExpr.getText()));
 			}
 		});
 		btnCalculate.setBounds(461, 303, 89, 23);
 		frame.getContentPane().add(btnCalculate);
+		
+		listMethods = new JList<>();
+		listMethods.setBounds(285, 199, 89, 127);
+		listModel = new DefaultListModel<>();
+		listSelectionModel = listMethods.getSelectionModel();
+		listSelectionModel.addListSelectionListener(new SharedListSelectionHandler());
+		listMethods.setModel(listModel);
+		frame.getContentPane().add(listMethods);
+		
+		textDesc = new JTextPane();
+		textDesc.setBounds(384, 198, 165, 75);
+		frame.getContentPane().add(textDesc);
+		
+		JLabel lblOperationList = new JLabel("Operation List");
+		lblOperationList.setBounds(285, 186, 89, 14);
+		frame.getContentPane().add(lblOperationList);
+		
+		JLabel lblDescription = new JLabel("Description");
+		lblDescription.setBounds(384, 186, 66, 14);
+		frame.getContentPane().add(lblDescription);
 	}
 	
 	private void getVariables(String input) {
@@ -133,13 +170,28 @@ public class Application {
 		for(String var : complexVar) {
 			String[] varNames = var.split("=");
 			if(varNames.length != 2) 
-				throw new IllegalArgumentException("Niepoprawny format zmiennej");
+				throw new IllegalArgumentException("Niepoprawny format zmiennej. Przyklad a=(1, 2); b=(1,2)");
 			String name = varNames[0].trim();
 			String[] number = varNames[1].split(",");
-			if(number.length != 2) throw new IllegalArgumentException("Niepoprawny format zmiennej");
+			if(number.length != 2) throw new IllegalArgumentException("Niepoprawny format zmiennej. Przyklad a=(1, 2); b=(1,2)");
 			Double realPart = Double.parseDouble(number[0].substring(1));
 			Double imgPart = Double.parseDouble(number[1].trim().substring(0, number[1].length()-2));
 			treeMain.getEval().variables.put(name, new ComplexNumber(realPart, imgPart));
+		}
+	}
+	
+	public void updateList() {
+		for (Entry<String, String> entry : methodDesc.entrySet()) {
+			listModel.addElement(new ClassMethod(entry.getKey(), entry.getValue()));
+		}
+	}
+
+	class SharedListSelectionHandler implements ListSelectionListener {
+		public void valueChanged(ListSelectionEvent e) {
+			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+			int index = lsm.getMaxSelectionIndex();
+			if (index != -1)
+				textDesc.setText(listModel.get(index).description);
 		}
 	}
 }

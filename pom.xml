@@ -40,24 +40,5 @@
     		<artifactId>antlr4</artifactId>
     		<version>4.7</version>
 		</dependency>
-		<dependency>
-     		<groupId>org.ow2.asm</groupId>
-    		<artifactId>asm</artifactId>
-    		<version>6.0</version>
-		</dependency>
-		<dependency>
-    		<groupId>org.ow2.asm</groupId>
-    		<artifactId>asm-util</artifactId>
-    		<version>6.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
-		<dependency>
-    		<groupId>org.ow2.asm</groupId>
-    		<artifactId>asm</artifactId>
-    		<version>5.2</version>
-    		 <configuration>
-          		<outputDirectory>/lib</outputDirectory>
-        	</configuration>
-		</dependency>
 	</dependencies>
 </project>
