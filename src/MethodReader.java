@@ -16,7 +16,7 @@ public class MethodReader {
 				if (!methods[i].isAnnotationPresent(Description.class))
 					continue;
 				Description description = (Description) methods[i].getAnnotation(Description.class);
-				System.out.println("Method description: " + description.description());
+				//System.out.println("Method description: " + description.description());
 				methodDescription.put(methods[i].getName(), description.description());
 			}
 

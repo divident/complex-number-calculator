@@ -71,7 +71,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 
 	@Override
 	public void enterImgNumber(CalculatorParser.ImgNumberContext ctx) {
-		this._currentTreeDepth += 2;
+		this._currentTreeDepth += 3;
 		this._maxTreeDepth = Math.max(this._currentTreeDepth, this._maxTreeDepth);
 		this._mv.visitTypeInsn(Opcodes.NEW, "ComplexNumber");
 		this._mv.visitInsn(Opcodes.DUP);
@@ -145,7 +145,7 @@ public class TreeCompilationListener extends CalculatorBaseListener {
 
 	@Override
 	public void enterIdentifier(CalculatorParser.IdentifierContext ctx) {
-		this._currentTreeDepth+=3;
+		this._currentTreeDepth+=4;
 		this._maxTreeDepth = Math.max(this._currentTreeDepth, this._maxTreeDepth);
 		this._mv.visitTypeInsn(Opcodes.NEW, "ComplexNumber");
 		this._mv.visitInsn(Opcodes.DUP);

@@ -33,6 +33,7 @@ public class Application {
 	private JTextPane textDesc;
 	private JButton btnCompile;
 	private Map<String, String> methodDesc;
+
 	/**
 	 * Launch the application.
 	 */
@@ -63,7 +64,7 @@ public class Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
+
 	}
 
 	/**
@@ -74,78 +75,77 @@ public class Application {
 		frame.setBounds(100, 100, 606, 402);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		JButton btnEvaluate = new JButton("Evaluate");
 		btnEvaluate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					evalScript.eval(pnScript.getText());
 				} catch (ScriptException e1) {
-					JOptionPane.showMessageDialog(frame,
-						    "Script is not valid " + e1.getMessage(),
-						    "Script warning",
-						    JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(frame, "Script is not valid " + e1.getMessage(), "Script warning",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
 		btnEvaluate.setBounds(10, 303, 89, 23);
 		frame.getContentPane().add(btnEvaluate);
-		
+
 		JLabel lblScript = new JLabel("Script");
 		lblScript.setBounds(10, 21, 46, 14);
 		frame.getContentPane().add(lblScript);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 41, 252, 251);
 		frame.getContentPane().add(scrollPane);
-		
+
 		pnScript = new JTextPane();
 		scrollPane.setViewportView(pnScript);
-		
+
 		JLabel lblExpression = new JLabel("Expression");
 		lblExpression.setBounds(285, 21, 89, 14);
 		frame.getContentPane().add(lblExpression);
-		
+
 		textVar = new JTextPane();
 		textVar.setBounds(285, 97, 265, 23);
 		frame.getContentPane().add(textVar);
-		
+
 		JLabel lblVariables = new JLabel("Variables");
 		lblVariables.setBounds(285, 75, 61, 14);
 		frame.getContentPane().add(lblVariables);
-		
+
 		textExpr = new JTextField();
 		textExpr.setBounds(285, 44, 269, 20);
 		frame.getContentPane().add(textExpr);
 		textExpr.setColumns(10);
-		
+
 		textResult = new JTextPane();
 		textResult.setBounds(285, 148, 265, 39);
 		textResult.setEditable(false);
 		frame.getContentPane().add(textResult);
-		
+
 		JLabel lblResult = new JLabel("Result");
 		lblResult.setBounds(285, 131, 46, 14);
 		frame.getContentPane().add(lblResult);
-		
+
 		JButton btnCalculate = new JButton("Calculate");
 		btnCalculate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!textVar.getText().isEmpty()) {
+				treeMain.getEval().variables.clear();
+				if (!textVar.getText().isEmpty()) {
 					try {
-					getVariables(textVar.getText());
-					textResult.setText(treeMain.eval(textExpr.getText()));
-					btnCompile.setEnabled(true);
-					} catch (IllegalArgumentException ex) {
-						ex.printStackTrace();
+						getVariables(textVar.getText());
+					} catch (Exception ex) {
+						//ex.printStackTrace();
 						textResult.setText(ex.getMessage());
-					} 
+					}
 				}
+				textResult.setText(treeMain.eval(textExpr.getText()));
+				btnCompile.setEnabled(true);
 			}
 		});
 		btnCalculate.setBounds(461, 303, 89, 23);
 		frame.getContentPane().add(btnCalculate);
-		
+
 		listMethods = new JList<>();
 		listMethods.setBounds(285, 199, 89, 127);
 		listModel = new DefaultListModel<>();
@@ -153,19 +153,19 @@ public class Application {
 		listSelectionModel.addListSelectionListener(new SharedListSelectionHandler());
 		listMethods.setModel(listModel);
 		frame.getContentPane().add(listMethods);
-		
+
 		textDesc = new JTextPane();
 		textDesc.setBounds(384, 198, 165, 75);
 		frame.getContentPane().add(textDesc);
-		
+
 		JLabel lblOperationList = new JLabel("Operation List");
 		lblOperationList.setBounds(285, 186, 89, 14);
 		frame.getContentPane().add(lblOperationList);
-		
+
 		JLabel lblDescription = new JLabel("Description");
 		lblDescription.setBounds(384, 186, 66, 14);
 		frame.getContentPane().add(lblDescription);
-		
+
 		btnCompile = new JButton("Compile");
 		btnCompile.setEnabled(false);
 		btnCompile.addActionListener(new ActionListener() {
@@ -176,23 +176,26 @@ public class Application {
 		btnCompile.setBounds(461, 337, 89, 23);
 		frame.getContentPane().add(btnCompile);
 	}
-	
-	private void getVariables(String input) {
-		//Variables format a=(2, 1); b=(0, 1)
+
+	private void getVariables(String input) throws Exception{
+		// Variables format a=(2, 1); b=(0, 1)
 		String[] complexVar = input.split(";");
-		for(String var : complexVar) {
+		for (String var : complexVar) {
 			String[] varNames = var.split("=");
-			if(varNames.length != 2) 
-				throw new IllegalArgumentException("Niepoprawny format zmiennej. Przyklad a=(1, 2); b=(1,2)");
+			if (varNames.length != 2)
+				throw new IllegalArgumentException("Niepoprawny format zmiennej. Przyklad a=(1, 2); b=(1, 2)");
 			String name = varNames[0].trim();
 			String[] number = varNames[1].split(",");
-			if(number.length != 2) throw new IllegalArgumentException("Niepoprawny format zmiennej. Przyklad a=(1, 2); b=(1,2)");
+			if (number.length != 2)
+				throw new IllegalArgumentException("Niepoprawny format zmiennej. Przyklad a=(1, 2); b=(1,2)");
+			number[0] = number[0].trim();
 			Double realPart = Double.parseDouble(number[0].substring(1));
-			Double imgPart = Double.parseDouble(number[1].trim().substring(0, number[1].length()-2));
+			number[1] = number[1].trim();
+			Double imgPart = Double.parseDouble(number[1].substring(0, number[1].length() - 1));
 			treeMain.getEval().variables.put(name, new ComplexNumber(realPart, imgPart));
 		}
 	}
-	
+
 	public void updateList() {
 		for (Entry<String, String> entry : methodDesc.entrySet()) {
 			listModel.addElement(new ClassMethod(entry.getKey(), entry.getValue()));

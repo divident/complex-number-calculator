@@ -86,7 +86,7 @@ public class ComplexNumber {
 
 	@Override
 	public String toString() {
-		return "ComplexNumber [Re=" + a + ", Im=" + b + "]";
+		return "[Re=" + a + ", Im=" + b + "]";
 	}
 
 	@Override

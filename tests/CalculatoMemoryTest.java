@@ -46,4 +46,18 @@ public class CalculatoMemoryTest {
 		eval.variables.putAll(memory);
 		assertTrue(number.equals(eval.visit(tree)));
 	}
+	
+	@Test
+	public void testAllComplexForm() {
+		memory.put("b", new ComplexNumber(3.2, 2.1));
+		memory.put("a", new ComplexNumber(5.2, 9.1));
+		setup("sqrt(1(cos(1.047197) + isin(1.047197))) * b / (-5 - i7) + 1*e^(i*1.047197) - a");
+		tree = parser.expr();
+		ComplexNumber number = (ComplexNumber.convertPolar(1, 1.047197).sqrt().mul(new ComplexNumber(3.2, 2.1))
+				.div(new ComplexNumber(-5, -7)).add(ComplexNumber.convertPolar(1, 1.047197)).sub(new ComplexNumber(5.2, 9.1)));
+		TreeVisitor eval = new TreeVisitor();
+		eval.variables.putAll(memory);
+		assertTrue(number.equals(eval.visit(tree)));
+		
+	}
 }
